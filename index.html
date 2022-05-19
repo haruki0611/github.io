@@ -1,21 +1,57 @@
-<!doctype html>
-<HTML>
+<!DOCTYPE html>
+<html lang="ja">
 
-<HEAD>
-<meta charset="UTF-8">
-<title>JavaScriptの基礎</title>
-</HEAD>
-<BODY>
-    <script type="text/javascript">
-        today = new Date();
-        document.write(today);
-        document.write("<h1>コンピュータグラフィックス</h1>");
-        document.write("<p>担当 中村直人</p>");
-        document.write("<p>この授業では、WebGLを用いてコンピュータグラフィックスを作成します。</p>");
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <!-- three.jsを読み込む(ローカル) -->
+    <!-- <script src="./three.js"></script> -->
+    <!-- three.jsを読み込む(CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/99/three.min.js"></script>
+</head>
 
-        var image = new Image(128,128); //image オブジェクトの作成
-        image.src = "ganba.png"; //imageのソースの指定
-        document.body.appendChild(image); //imageをDOM要素に組み込む
-    </script>
-</BODY>
-</HTML>
+<body>
+<script>
+var init = function() {
+
+    // レンダラーを作成
+var renderer = new THREE.WebGLRenderer();
+// レンダラーのサイズを設定
+renderer.setSize(800, 600);
+// canvasをbodyに追加
+document.body.appendChild(renderer.domElement);
+
+// シーンを作成
+var scene = new THREE.Scene();
+
+// カメラを作成
+var camera = new THREE.PerspectiveCamera(45, 800 / 600, 1, 1000);
+
+// 平行光源を生成
+var light = new THREE.DirectionalLight(0xffffff);
+light.position.set(1, 1, 1);
+scene.add(light);
+
+// 箱を作成
+var geometry = new THREE.BoxGeometry(1, 1, 1);
+var material = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+var box = new THREE.Mesh(geometry, material);
+box.position.z = -5;
+scene.add(box)
+
+// 描画
+renderer.render(scene, camera);
+
+var update = function() {
+requestAnimationFrame(update);
+// 箱を回転させる
+box.rotation.x += 0.01;
+box.rotation.y += 0.01;
+renderer.render(scene, camera);
+};
+update()
+
+}
+</script>
+</body>
+</html>

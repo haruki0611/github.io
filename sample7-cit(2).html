@@ -77,7 +77,12 @@
         var Cylinder = new THREE.Mesh(geometry3, mat);
         Cylinder.position.set(1.5,0,0);
         scene.add(Cylinder);
-
+        
+        //ドーナッツ
+        var torusGeometry = new THREE.TorusGeometry( 3, 0.8, 6, 12 ); 
+        var torus = new THREE.Mesh(torusGeometry, mat);
+        torus.position.set(-1, -1, -10);
+        scene.add(torus);
 
         update();
 

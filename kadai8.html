@@ -52,7 +52,7 @@
 
         // 木0をスプライトで作成
         var textureLoader = new THREE.TextureLoader();  
-        var texture0 = textureLoader.load("stone-bump.jpg");
+        var texture0 = textureLoader.load("stone.jpg");
         const material0 = new THREE.SpriteMaterial({ map: texture0,});
 
         const sprite0 = new THREE.Sprite(material0);
@@ -83,7 +83,7 @@
         sprite0.position.y = 50;
         sprite0.position.z = 100;
         sprite0.scale.set(100,100,100);
-        scene.add(sprite0);
+        scene.add(sprite3);
 
         tick();
         // 毎フレーム時に実行されるループイベントです

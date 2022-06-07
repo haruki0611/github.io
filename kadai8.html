@@ -5,6 +5,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
     <script src="OrbitControls.js"></script>
     <script>
+    　
       // ページの読み込みを待つ
       window.addEventListener('load', init);
 
@@ -27,7 +28,7 @@
         // カメラを作成
         const camera = new THREE.PerspectiveCamera(45, width / height);
         // カメラの初期座標を設定
-        camera.position.set(100, 200, 400);
+        camera.position.set(400, 400, 400);
 
         // カメラコントローラーを作成
         const controls = new THREE.OrbitControls(camera,document.body);
@@ -94,6 +95,8 @@
   </head>
 
   <body>
+      あああ
     <canvas id="myCanvas"></canvas>
+    いいいい
   </body>
 </html>

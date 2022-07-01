@@ -1,24 +1,26 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <script src="https://unpkg.com/three@0.137.4/build/three.min.js"></script>
-    <script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
-  </head>
-<body>
- <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+    　
       // ページの読み込みを待つ
-      window.addEventListener('DOMContentLoaded', init);
+      window.addEventListener('load', init);
 
       function init() {
         // サイズを指定
-        const width = 800
-        const height = 600;
+        const width = 960;
+        const height = 540;
 
         // レンダラーを作成
-        var renderer = new THREE.WebGLRenderer();
-        document.body.appendChild(renderer.domElement);
+        const renderer = new THREE.WebGLRenderer({
+          canvas: document.querySelector('#myCanvas')
+        });
         renderer.setSize(width, height);
-        renderer.shadowMap.enabled = true;
+        // 背景の色を設定
+        renderer.setClearColor(0xeeeeff);
 
         // シーンを作成
         const scene = new THREE.Scene();
@@ -26,153 +28,68 @@
         // カメラを作成
         const camera = new THREE.PerspectiveCamera(45, width / height);
         // カメラの初期座標を設定
-        camera.position.set(0, 4, 10);
+        camera.position.set(200, 200, 400);
 
         // カメラコントローラーを作成
-        const controls = new THREE.OrbitControls(camera, document.body); 
-        /*
+        const controls = new THREE.OrbitControls(camera,document.body);
+  
         // 平行光源1
         var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-        directionalLight1.position.set(10, 10, 10);
+        directionalLight1.position.set(100, 100, 100);
         // シーンに追加
         scene.add(directionalLight1);
-        */
         // 平行光源2
-        // 照明を作成
-        const light = new THREE.SpotLight(0xFFFFFF, 3, 30, Math.PI / 4, 10, 0.5);
-        light.position.set(0, 3, 0);
-        // ライトに影を有効にする
-        light.castShadow = true;
-        scene.add(light);
-
-        light.shadow.mapSize.width = 2048;
-        light.shadow.mapSize.height = 2048;
-        
-
-        var directionalLight2 = new THREE.DirectionalLight(0x888888);
-        directionalLight2.position.set(-10, -10, 10);
+        var directionalLight2 = new THREE.DirectionalLight(0xffffff);
+        directionalLight2.position.set(-100, 100, 100);
         // シーンに追加
         scene.add(directionalLight2);
 
-        //メタルテクスチャー
         var textureLoader = new THREE.TextureLoader();  
         var texture0 = textureLoader.load("metal.jpg");
-        const metal = new THREE.SpriteMaterial({ map: texture0,});
+        const material0 = new THREE.SpriteMaterial({ map: texture0,});
 
-        //シーテクスチャ
-        var textureLoader = new THREE.TextureLoader();  
-        var texture0 = textureLoader.load("sea.jpg");
-        const sea = new THREE.SpriteMaterial({ map: texture1,});
-        
-        // 平面を作成
-        var planeGeometry = new THREE.PlaneGeometry(5,5,10,10); //縦、横、分割数、分割数
-        var plane = new THREE.Mesh(planeGeometry,sea);
-        plane.rotation.set( -Math.PI/2, 0, 0 );
-        plane.position.set(0,0,0);
-        planeGeometry.receiveShadow = true;
-        scene.add(plane);
+        const sprite0 = new THREE.Sprite(material0);
+        sprite0.position.x = -50;
+        sprite0.position.y = 50;
+        sprite0.position.z = 50;
+        sprite0.scale.set(100,100,100);
+        scene.add(sprite0);
 
+        const sprite1 = new THREE.Sprite(material0);
+        sprite1.position.x = 50;
+        sprite1.position.y = 50;
+        sprite1.position.z = -50;
+        sprite1.scale.set(100,100,100);
+        scene.add(sprite1);
 
-        // 頭を作成
-        var head_g = new THREE.CylinderGeometry( 0.3, 0.3, 0.8 );
-        var material_beak = new THREE.MeshPhongMaterial({ color: 0xffff00 });
-        var head = new THREE.Mesh(head_g, material_beak);
-        head.rotation.x = 1.5;
-        head.position.set(0,1,0);//allの中心が原点になる
-        //head.castShadow = true;
+        const sprite2 = new THREE.Sprite(material0);
+        sprite2.position.x = -50;
+        sprite2.position.y = 50;
+        sprite2.position.z = -50;
+        sprite2.scale.set(100,100,100);
+        scene.add(sprite2);
 
-        //くちばしの作成
-        var beak_g = new THREE.CylinderGeometry( 0.1, 0.3, 0.5 );
-        var beak = new THREE.Mesh( beak_g, metal);
-        beak.rotation.x = 1.5;
-        beak.position.set(0,0,0);
-        beak.castShadow = true;
+        const sprite3 = new THREE.Sprite(material0);
+        sprite3.position.x = 50;
+        sprite3.position.y = 50;
+        sprite3.position.z = 50;
+        sprite3.scale.set(100,100,100);
+        scene.add(sprite3);
 
-        //軸を作成
-        var body_g = new THREE.CylinderGeometry( 0.2, 0.2, 1, 64);
-        var material_r = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-        var body = new THREE.Mesh( body_g, material_r);
-        body.scale.y =1.5;
-        body.position.set(0,0,0);
-        //body.castShadow = true;
-
-        //足を作成
-        var leg_g = new THREE.CylinderGeometry( 1, 1, 0.2, 64);
-        var material_l = new THREE.MeshPhongMaterial({ color: 0x770077 });
-        var leg = new THREE.Mesh( leg_g, material_l);
-        leg.position.set(0, -0.8, 0);
-        //leg.castShadow = true;
-    
-        //左羽を作成
-        var win_g = new THREE.SphereGeometry( 0.7, 32, 32 );
-        var material_w = new THREE.MeshPhongMaterial({ color: 0x007777 });
-        var lwin = new THREE.Mesh( win_g, metal);
-        lwin.scale.x = 0.1;
-        lwin.scale.z = 0.5;
-        lwin.rotation.x = -1;
-        lwin.rotation.z = 0.9;
-        lwin.position.set(0.65,-0.395,0.25);
-        lwin.castShadow = true;
-
-        //右羽を作成
-        var rwin = new THREE.Mesh( win_g, metal);
-        rwin.scale.x = 0.1;
-        rwin.scale.y = 0.5;
-        rwin.rotation.x = 1;
-        rwin.rotation.z = -0.8;
-        rwin.rotation.y = -0.5;
-        rwin.position.set(-0.55,-0.545,0.25);
-        rwin.castShadow = true;
-
-        //上羽を作成
-        var uwin = new THREE.Mesh( win_g, metal);
-        uwin.scale.x = 0.1;
-        uwin.scale.z = 0.5;
-        uwin.rotation.y = -1;
-        uwin.position.set(0,0.805,-0.05);
-        uwin.castShadow = true;
-
-        //土台のオブジェクト
-        const dodai = new THREE.Group();
-        dodai.add(head); // 頭を追加
-        dodai.add(body); //軸を追加
-        dodai.add(leg); //足を追加
-        dodai.position.set(0,1,0);//土台の原点の位置
-        scene.add(dodai);
-
-        const hane = new THREE.Group();
-        hane.add(lwin); //左羽を追加
-        hane.add(rwin); //右羽を追加  
-        hane.add(uwin); //上羽を追加       
-        hane.add(beak); //くちばし
-        hane.position.set(0,2.045,0.65);
-        scene.add(hane);
-
-        //全体のオブジェクト
-        const all = new THREE.Group();
-        all.add(plane);//平面を追加
-        all.add(dodai); // 土台を追加
-        all.add(hane);//羽を追加
-        all.position.set(0,0,0);//全体グループの原点の位置
-        scene.add(all); 
-
-        update();
-
+        tick();
         // 毎フレーム時に実行されるループイベントです
-        function update() {
+        function tick() {
           // レンダリング
           renderer.render(scene, camera);
-          requestAnimationFrame(update);
-
-
-          // ペンギンを回転させる
-          hane.rotation.z += 0.25;
-
-          // 全体を回転させる
-          //all.rotation.x += 0.01;
-          //all.rotation.y += 0.005;;
+          requestAnimationFrame(tick);
         }
       }
     </script>
-</body>
+  </head>
+
+  <body>
+    <h1>簡単なパズル</h1>
+    4つの四角の画像がありカメラを一定の場所にもっていくと大きな四角になります。
+    <canvas id="myCanvas"></canvas>
+  </body>
 </html>

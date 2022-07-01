@@ -46,20 +46,19 @@
         var texture = textureLoader.load("metal.jpg");
         var mat = new THREE.MeshPhongMaterial();
         mat.map = texture;
-        /*
-        // バンプマップ読み込み
-        var bump = textureLoader.load("metal.jpg");
-        mat.bumpMap = bump;
-        mat.bumpscale = 0.2;
-        */
+
+        //くちばしの作成
+        var beak_g = new THREE.CylinderGeometry( 0.1, 0.3, 0.5 );
+        var beak = new THREE.Mesh( beak_g, mat);
+        beak.rotation.x = 1.5;
+        beak.position.set(0,0,0);
+
         // 箱を作成
         var geometry1 = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-        //var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-        //var box = new THREE.Mesh(geometry, material);
         var box = new THREE.Mesh(geometry1, mat);
         box.position.set(-1.5,0,0); //位置を指定
         scene.add(box);   // シーンに追加
-
+        /*
         // 球を作成
         var geometry2 = new THREE.SphereGeometry(0.5, 32, 32 ); ;
         var Sphere = new THREE.Mesh(geometry2, mat);
@@ -77,7 +76,7 @@
         var torus = new THREE.Mesh(torusGeometry, mat);
         torus.position.set(-1, -1, -10);
         scene.add(torus);
-        
+        */
         update();
 
         // 毎フレーム時に実行されるループイベントです
@@ -100,7 +99,5 @@
         }
       }
     </script>
-    <h1>いろいろな白煉瓦の形</h1>
-    円と台形と立方体とドーナッツ型に白煉瓦のテクスチャをはりました。
 </body>
 </html>

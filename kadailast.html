@@ -1,26 +1,23 @@
-<!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
     <meta charset="utf-8" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-    <script src="OrbitControls.js"></script>
-    <script>
-    　
+    <script src="https://unpkg.com/three@0.137.4/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+  </head>
+<body>
+ <script>
       // ページの読み込みを待つ
-      window.addEventListener('load', init);
+      window.addEventListener('DOMContentLoaded', init);
 
       function init() {
         // サイズを指定
-        const width = 960;
-        const height = 540;
+        const width = 800
+        const height = 600;
 
         // レンダラーを作成
-        const renderer = new THREE.WebGLRenderer({
-          canvas: document.querySelector('#myCanvas')
-        });
+        var renderer = new THREE.WebGLRenderer();
+        document.body.appendChild(renderer.domElement);
         renderer.setSize(width, height);
-        // 背景の色を設定
-        renderer.setClearColor(0xeeeeff);
 
         // シーンを作成
         const scene = new THREE.Scene();
@@ -28,68 +25,82 @@
         // カメラを作成
         const camera = new THREE.PerspectiveCamera(45, width / height);
         // カメラの初期座標を設定
-        camera.position.set(200, 200, 400);
+        camera.position.set(0, 0, 5);
 
         // カメラコントローラーを作成
-        const controls = new THREE.OrbitControls(camera,document.body);
-  
+        const controls = new THREE.OrbitControls(camera, document.body); 
+        
         // 平行光源1
         var directionalLight1 = new THREE.DirectionalLight(0xffffff);
-        directionalLight1.position.set(100, 100, 100);
+        directionalLight1.position.set(10, 10, 10);
         // シーンに追加
         scene.add(directionalLight1);
         // 平行光源2
-        var directionalLight2 = new THREE.DirectionalLight(0xffffff);
-        directionalLight2.position.set(-100, 100, 100);
+        var directionalLight2 = new THREE.DirectionalLight(0x888888);
+        directionalLight2.position.set(-10, -10, 10);
         // シーンに追加
         scene.add(directionalLight2);
 
-        var textureLoader = new THREE.TextureLoader();  
-        var texture0 = textureLoader.load("metal.jpg");
-        const material0 = new THREE.SpriteMaterial({ map: texture0,});
+        // テクスチャー読み込み
+        var textureLoader = new THREE.TextureLoader(); 
+        var texture = textureLoader.load("metal.jpg");
+        var mat = new THREE.MeshPhongMaterial();
+        mat.map = texture;
 
-        const sprite0 = new THREE.Sprite(material0);
-        sprite0.position.x = -50;
-        sprite0.position.y = 50;
-        sprite0.position.z = 50;
-        sprite0.scale.set(100,100,100);
-        scene.add(sprite0);
+        // バンプマップ読み込み
+        var bump = textureLoader.load("metal.jpg");
+        mat.bumpMap = bump;
+        mat.bumpscale = 0.2;
+        
+        // 箱を作成
+        var geometry1 = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+        //var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+        //var box = new THREE.Mesh(geometry, material);
+        var box = new THREE.Mesh(geometry1, mat);
+        box.position.set(-1.5,0,0); //位置を指定
+        scene.add(box);   // シーンに追加
 
-        const sprite1 = new THREE.Sprite(material0);
-        sprite1.position.x = 50;
-        sprite1.position.y = 50;
-        sprite1.position.z = -50;
-        sprite1.scale.set(100,100,100);
-        scene.add(sprite1);
+        // 球を作成
+        var geometry2 = new THREE.SphereGeometry(0.5, 32, 32 ); ;
+        var Sphere = new THREE.Mesh(geometry2, mat);
+        Sphere.position.set(0,0,0);
+        scene.add(Sphere);
 
-        const sprite2 = new THREE.Sprite(material0);
-        sprite2.position.x = -50;
-        sprite2.position.y = 50;
-        sprite2.position.z = -50;
-        sprite2.scale.set(100,100,100);
-        scene.add(sprite2);
+        // 円柱を作成
+        var geometry3 = new THREE.CylinderGeometry( 0.2, 0.5, 0.5, 20, 4 );
+        var Cylinder = new THREE.Mesh(geometry3, mat);
+        Cylinder.position.set(1.5,0,0);
+        scene.add(Cylinder);
 
-        const sprite3 = new THREE.Sprite(material0);
-        sprite3.position.x = 50;
-        sprite3.position.y = 50;
-        sprite3.position.z = 50;
-        sprite3.scale.set(100,100,100);
-        scene.add(sprite3);
+        //ドーナッツ
+        var torusGeometry = new THREE.TorusGeometry( 3, 0.8, 6, 12 ); 
+        var torus = new THREE.Mesh(torusGeometry, mat);
+        torus.position.set(-1, -1, -10);
+        scene.add(torus);
+        
+        update();
 
-        tick();
         // 毎フレーム時に実行されるループイベントです
-        function tick() {
+        function update() {
           // レンダリング
           renderer.render(scene, camera);
-          requestAnimationFrame(tick);
+          requestAnimationFrame(update);
+
+           // 箱を回転させる
+          box.rotation.x += 0.01;
+          box.rotation.y += 0.01;
+
+          // 箱を回転させる
+          Sphere.rotation.x += 0.01;
+          Sphere.rotation.y += 0.01;
+
+          // 円柱を回転させる
+          Cylinder.rotation.x += 0.01;
+          Cylinder.rotation.y += 0.01;
         }
       }
     </script>
-  </head>
-
-  <body>
-    <h1>簡単なパズル</h1>
-    4つの四角の画像がありカメラを一定の場所にもっていくと大きな四角になります。
-    <canvas id="myCanvas"></canvas>
-  </body>
+    <h1>いろいろな白煉瓦の形</h1>
+    円と台形と立方体とドーナッツ型に白煉瓦のテクスチャをはりました。
+</body>
 </html>

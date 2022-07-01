@@ -52,6 +52,7 @@
         var beak = new THREE.Mesh( beak_g, mat);
         beak.rotation.x = 1.5;
         beak.position.set(0,0,0);
+        scene.add(beak);
 
         // 箱を作成
         var geometry1 = new THREE.BoxGeometry(0.8, 0.8, 0.8);
@@ -88,14 +89,6 @@
            // 箱を回転させる
           box.rotation.x += 0.01;
           box.rotation.y += 0.01;
-
-          // 箱を回転させる
-          Sphere.rotation.x += 0.01;
-          Sphere.rotation.y += 0.01;
-
-          // 円柱を回転させる
-          Cylinder.rotation.x += 0.01;
-          Cylinder.rotation.y += 0.01;
         }
       }
     </script>

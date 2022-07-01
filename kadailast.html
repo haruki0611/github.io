@@ -25,7 +25,7 @@
         // カメラを作成
         const camera = new THREE.PerspectiveCamera(45, width / height);
         // カメラの初期座標を設定
-        camera.position.set(0, 0, 5);
+        camera.position.set(0, 4, 10);
 
         // カメラコントローラーを作成
         const controls = new THREE.OrbitControls(camera, document.body); 
@@ -46,6 +46,25 @@
         var texture = textureLoader.load("metal.jpg");
         var mat = new THREE.MeshPhongMaterial();
         mat.map = texture;
+
+        // 頭を作成
+        var head_g = new THREE.CylinderGeometry( 0.3, 0.3, 1 );
+        var a = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+        var head = new THREE.Mesh(head_g, mat);
+        head.rotation.x = 1.5;
+        head.position.set(0,-0.35,1.25);
+        
+        // 円柱を作成
+        var geometry3 = new THREE.CylinderGeometry(1, 1, 2, 20);
+        var body = new THREE.Mesh(geometry3, mat);
+        body.rotation.x = -1.65;
+        body.position.set(0,0,0);
+
+        // 球を作成
+        var geometry2 = new THREE.SphereGeometry(1, 32, 32 ); ;
+        var front = new THREE.Mesh(geometry2, mat);
+        front.position.set(0,-0.07,-1);
+
 
         //くちばしの作成
         var beak_g = new THREE.CylinderGeometry( 0, 0.3, 0.5 );
@@ -81,40 +100,30 @@
         uwin.position.set(0,0.805,-0.05);
         uwin.castShadow = true;
 
-        /*
-        // 球を作成
-        var geometry2 = new THREE.SphereGeometry(0.5, 32, 32 ); ;
-        var Sphere = new THREE.Mesh(geometry2, mat);
-        Sphere.position.set(0,0,0);
-        scene.add(Sphere);
-
-        // 円柱を作成
-        var geometry3 = new THREE.CylinderGeometry( 0.2, 0.5, 0.5, 20, 4 );
-        var Cylinder = new THREE.Mesh(geometry3, mat);
-        Cylinder.position.set(1.5,0,0);
-        scene.add(Cylinder);
-
-        //ドーナッツ
-        var torusGeometry = new THREE.TorusGeometry( 3, 0.8, 6, 12 ); 
-        var torus = new THREE.Mesh(torusGeometry, mat);
-        torus.position.set(-1, -1, -10);
-        scene.add(torus);
-        */
-
         const hane = new THREE.Group();
         hane.add(lwin); //左羽を追加
         hane.add(rwin); //右羽を追加  
         hane.add(uwin); //上羽を追加       
-        hane.add(beak); //くちばし
-        hane.position.set(0,2.045,0.65);
+        hane.add(beak); //くちばしを追加
+        hane.position.set(0,-0.3,2);
         scene.add(hane);
+
+        
+        const mbody = new THREE.Group();
+        mbody.add(body);
+        mbody.add(front);
+        mbody.add(head); //頭を追加
+        mbody.position.set(0,0,0);
+        scene.add(mbody);
+
 
         //全体のオブジェクト
         const all = new THREE.Group();
         all.add(hane);
+        all.add(mbody)
         all.position.set(0,0,0);//全体グループの原点の位置
         scene.add(all); 
-        
+
         update();
 
         // 毎フレーム時に実行されるループイベントです
@@ -123,9 +132,8 @@
           renderer.render(scene, camera);
           requestAnimationFrame(update);
 
-           // 箱を回転させる
-          box.rotation.x += 0.01;
-          box.rotation.y += 0.01;
+          hane.rotation.z += 0.25;
+
         }
       }
     </script>

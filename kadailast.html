@@ -19,13 +19,14 @@
         document.body.appendChild(renderer.domElement);
         renderer.setSize(width, height);
 
+        renderer.setClearColor(0x000fff);
         // シーンを作成
         const scene = new THREE.Scene();
 
         // カメラを作成
         const camera = new THREE.PerspectiveCamera(45, width / height);
         // カメラの初期座標を設定
-        camera.position.set(0, 4, 10);
+        camera.position.set(10, 10, 10);
 
         // カメラコントローラーを作成
         const controls = new THREE.OrbitControls(camera, document.body); 
@@ -49,40 +50,54 @@
 
         // テクスチャー読み込み
         var textureLoader = new THREE.TextureLoader(); 
-        var texture = textureLoader.load("sea.jpg");
-        var sea = new THREE.MeshPhongMaterial();
-        sea.map = texture;        
+        var texture = textureLoader.load("sky.jpg");
+        var sky = new THREE.MeshPhongMaterial();
+        sky.map = texture;       
+        
+        var a = new THREE.MeshPhongMaterial({ color: 0xffff00 });
 
-
+        //平面を作成
+        var geometry = new THREE.PlaneGeometry(1000, 1000);
+        var plane1 = new THREE.Mesh(geometry, sky);
+        plane1.rotation.set( -Math.PI/2, 0, 0 );
+        plane1.position.set(0,-5,0);
+        scene.add(plane1);
 
         // 頭を作成
         var head_g = new THREE.CylinderGeometry( 0.3, 0.3, 1 );
-        var a = new THREE.MeshPhongMaterial({ color: 0xffff00 });
-        var head = new THREE.Mesh(head_g, sea);
+        var head = new THREE.Mesh(head_g, a);
         head.rotation.x = 1.5;
         head.position.set(0,-0.35,1.25);
         
         // 円柱を作成
         var geometry3 = new THREE.CylinderGeometry(1, 1, 2, 20);
-        var body = new THREE.Mesh(geometry3, metal);
+        var body = new THREE.Mesh(geometry3, a);
         body.rotation.x = -1.65;
         body.position.set(0,0,0);
 
         // 球を作成
         var geometry2 = new THREE.SphereGeometry(0.98, 32, 32); ;
-        var front = new THREE.Mesh(geometry2, metal);
+        var front = new THREE.Mesh(geometry2, a);
         front.position.set(0,-0.08,-1);
 
+        var cylinderGeometry = new THREE.CylinderGeometry( 1, 1, 0.2, 4);
+        var rtubasa = new THREE.Mesh(cylinderGeometry,a);
+        rtubasa.rotation.y = 0.8;
+        rtubasa.position.set(1.5, 0, 0);
+
+        var ltubasa = new THREE.Mesh(cylinderGeometry,a);
+        ltubasa.rotation.y = 0.8;
+        ltubasa.position.set(-1.5, 0, 0);
 
         //くちばしの作成
         var beak_g = new THREE.CylinderGeometry( 0, 0.3, 0.5 );
-        var beak = new THREE.Mesh( beak_g, metal);
+        var beak = new THREE.Mesh( beak_g, a);
         beak.rotation.x = 1.5;
         beak.position.set(0,0,0);
         
         //左羽を作成
         var win_g = new THREE.SphereGeometry( 0.7, 32, 32 );
-        var lwin = new THREE.Mesh( win_g, metal);
+        var lwin = new THREE.Mesh( win_g, a);
         lwin.scale.x = 0.1;
         lwin.scale.z = 0.5;
         lwin.rotation.x = -1;
@@ -91,7 +106,7 @@
         lwin.castShadow = true;
 
         //右羽を作成
-        var rwin = new THREE.Mesh( win_g, metal);
+        var rwin = new THREE.Mesh( win_g, a);
         rwin.scale.x = 0.1;
         rwin.scale.y = 0.5;
         rwin.rotation.x = 1;
@@ -101,7 +116,7 @@
         rwin.castShadow = true;
 
         //上羽を作成
-        var uwin = new THREE.Mesh( win_g, metal);
+        var uwin = new THREE.Mesh( win_g, a);
         uwin.scale.x = 0.1;
         uwin.scale.z = 0.5;
         uwin.rotation.y = -1;
@@ -121,6 +136,8 @@
         mbody.add(body);
         mbody.add(front);
         mbody.add(head); //頭を追加
+        mbody.add(rtubasa);
+        mbody.add(ltubasa);
         mbody.position.set(0,0,0);
         scene.add(mbody);
 

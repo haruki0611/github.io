@@ -19,7 +19,7 @@
         document.body.appendChild(renderer.domElement);
         renderer.setSize(width, height);
 
-        renderer.setClearColor(0x000fff);
+        renderer.setClearColor(0x00bfff);
         // シーンを作成
         const scene = new THREE.Scene();
 
@@ -50,17 +50,17 @@
 
         // テクスチャー読み込み
         var textureLoader = new THREE.TextureLoader(); 
-        var texture = textureLoader.load("sky.jpg");
+        var texture = textureLoader.load("sky2.jpg");
         var sky = new THREE.MeshPhongMaterial();
         sky.map = texture;       
         
         var a = new THREE.MeshPhongMaterial({ color: 0xffff00 });
 
         //平面を作成
-        var geometry = new THREE.PlaneGeometry(1000, 1000);
+        var geometry = new THREE.PlaneGeometry(100, 100);
         var plane1 = new THREE.Mesh(geometry, sky);
         plane1.rotation.set( -Math.PI/2, 0, 0 );
-        plane1.position.set(0,-5,0);
+        plane1.position.set(0,-2,0);
         scene.add(plane1);
 
         // 頭を作成
